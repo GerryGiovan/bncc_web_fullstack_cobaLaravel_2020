@@ -1,20 +1,52 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-    <head>
-        <meta charset="utf-8">
-        <title></title>
-    </head>
-    <body>
-        <form class="" action="{{url("/pertanyaan")}}" method="post">
-            @csrf
-            <p>Input ID User</p>
-            <input type="text" name="id" value="" placeholder="Input Id" required>
-            <p>Input Title</p>
-            <input type="text" name="title" value="" placeholder="Input Title" required>
-            <p>Input Question</p>
-            <input type="text" name="question" value="" placeholder="Input Question" required>
-            <br><br>
-            <input type="submit" name="Submit" value="Submit">
-        </form>
-    </body>
-</html>
+@extends('adminLTE.master')
+@section('content')
+<div class="card card-primary">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page"><a href="{{url('/pertanyaan')}}">Pertanyaan</a></li>
+        <li class="breadcrumb-item">Create</li>
+      </ol>
+    </nav>
+    <div class="card-header">
+      <h3 class="card-title">Buat Pertanyaan</h3>
+    </div>
+
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form role="form" method="POST" action="/pertanyaan">
+        @csrf
+
+      <div class="card-body">
+
+        <div class="form-group">
+          <label for="judul">Judul Pertanyaan</label>
+          <input type="text" class="form-control" id="judul" name="judul" placeholder="Judul Pertanyaan" required>
+
+          @error('judul')
+                <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
+
+        </div>
+
+        <div class="form-group">
+          <label for="isi">Isi Pertanyaan</label>
+          <input type="text" class="form-control" id="isi" name="isi" placeholder="Isi Pertanyaan" required>
+
+          @error('isi')
+              <div class="alert alert-danger">{{ $message }}</div>
+          @enderror
+
+        </div>
+
+      </div>
+
+      <!-- /.card-body -->
+
+      <div class="card-footer">
+        <button type="submit" class="btn btn-primary">Create</button>
+      </div>
+
+    </form>
+  </div>
+
+@endsection

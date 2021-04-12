@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
+use App\Pertanyaan;
 class PertanyaanController extends Controller
 {
     /**
@@ -14,8 +14,10 @@ class PertanyaanController extends Controller
      */
     public function index()
     {
-        $pertanyaans = DB::table('pertanyaan')->get();
-        return view('pertanyaan', compact('pertanyaans'));
+        /* Task 15 Laravel CRUD
+        $pertanyaan = DB::table('pertanyaan')->get(); */
+        $pertanyaan = Pertanyaan::all();
+        return view('pertanyaan', compact('pertanyaan'));
     }
 
     /**
@@ -36,16 +38,23 @@ class PertanyaanController extends Controller
      */
     public function store(Request $request)
     {
+        /* Task 15 Laravel CRUD
         DB::table('pertanyaan')->insert([
-            'id_pengguna'=> $request->id,
-            'judul' => $request->title,
+            'id_pengguna'=> 1,
+            'judul' => $request->judul,
             'vote' => 0,
             'jawaban_terbaik' => "belum ada",
-            'id_jawaban' => 1,
-            'isi' => $request->question,
+            'isi' => $request->isi,
+            'time' => date('Y-m-d H:i:s')
+        ]); */
+
+        Pertanyaan::create([
+            'judul' => $request->judul,
+            'vote' => 0,
+            'jawaban_terbaik' => "belum ada",
+            'isi' => $request->isi,
             'time' => date('Y-m-d H:i:s')
         ]);
-
         return redirect(url('/pertanyaan'));
     }
 
@@ -57,8 +66,10 @@ class PertanyaanController extends Controller
      */
     public function show($id)
     {
-        $pertanyaans = DB::table('pertanyaan')->where('id', '=', $id)->get();
-        return view('pertanyaan', compact('pertanyaans'));
+        /* Task 15 Laravel CRUD
+        $pertanyaan = DB::table('pertanyaan')->where('id', $id)->first(); */
+        $pertanyaan = Pertanyaan::where('id', $id)->first();
+        return view('/pertanyaanShow', compact('pertanyaan'));
     }
 
     /**
@@ -69,8 +80,10 @@ class PertanyaanController extends Controller
      */
     public function edit($id)
     {
-        $pertanyaans = DB::table('pertanyaan')->where('id', '=', $id)->get();
-        return view('pertanyaanUpdate', compact('pertanyaans'));
+        /* Task 15 Laravel CRUD
+        $pertanyaan = DB::table('pertanyaan')->where('id', $id)->first(); */
+        $pertanyaan = Pertanyaan::where('id', $id)->first();
+        return view('pertanyaanUpdate', compact('pertanyaan'));
     }
 
     /**
@@ -82,13 +95,18 @@ class PertanyaanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $pertanyaans = DB::table('pertanyaan')->where('id', '=', $id)->update([
-                            'id_pengguna' => $request->id,
-                            'judul' => $request->title,
-                            'isi' => $request->question,
+        /* Task 15 Laravel CRUD
+        $pertanyaan = DB::table('pertanyaan')->where('id', $id)->update([
+                            'id_pengguna' => 1,
+                            'judul' => $request->judul,
+                            'isi' => $request->isi,
                             'time' => date('Y-m-d H:i:s')
-                        ]);
-        return view('pertanyaan', compact('pertanyaans'));
+                        ]); */
+        $pertanyaan = Pertanyaan::where('id', $id)->first();
+        $pertanyaan->judul = $request->judul;
+        $pertanyaan->isi = $request->isi;
+        $pertanyaan->save();
+        return redirect('/pertanyaan');
     }
 
     /**
@@ -99,7 +117,7 @@ class PertanyaanController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('pertanyaan')->where('id', '=', $id)->delete();
-        return redirect(url('/pertanyaan'));
+        Pertanyaan::find($id)->delete();
+        return redirect('/pertanyaan');
     }
 }
